@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "@blueprintjs/core";
+import { FormGroup, InputGroup, Button } from "@blueprintjs/core";
 import axios from "axios";
 
 class Auth extends Component {
@@ -16,70 +16,84 @@ class Auth extends Component {
     };
   }
 
-  handleSubmit = e => {
-    let { form } = this.state;
-    const base_url = "http://localhost:3000/api";
-    e.preventDefault();
-
-    axios
-      .post(`${base_url}/auth/register`, form)
-      .then(() => {
-        console.log(this);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
   handleChange = e => {
     const { form } = this.state;
     let field = e.target.name;
     form[field] = e.target.value;
 
-    console.log(form);
-
     this.setState({ form });
   };
 
+  handleSubmit = e => {
+    e.preventDefault();
+    let { form } = this.state;
+    const base_url = "http://localhost:3000/api";
+
+    axios
+      .post(`${base_url}/auth/register`, form)
+      .then(res => {
+        this.props.message = res.data.msg;
+        //this.toaster.show({ message: msg });
+      })
+      .catch(err => {
+        this.props.message = err.message;
+      });
+  };
+
   render() {
+    console.log(this.props);
     return (
       <form onSubmit={this.handleSubmit}>
-        <input
-          className="bp3-input bp3-round"
-          type="text"
-          name="name"
-          placeholder="Nombre"
-          onChange={this.handleChange}
+        <FormGroup>
+          <InputGroup
+            round="true"
+            type="text"
+            name="name"
+            placeholder="Nombre"
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <FormGroup>
+          <InputGroup
+            round="true"
+            type="text"
+            name="last_name"
+            placeholder="Apellido"
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <FormGroup>
+          <InputGroup
+            round="true"
+            type="text"
+            name="email"
+            placeholder="Email"
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <FormGroup>
+          <InputGroup
+            round="true"
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <FormGroup>
+          <InputGroup
+            round="true"
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirmar Password"
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <Button
+          type="submit"
+          text="Registro"
+          onClick={this.props.handleClose}
         />
-        <input
-          className="bp3-input bp3-round"
-          type="text"
-          name="last_name"
-          placeholder="Apellido"
-          onChange={this.handleChange}
-        />
-        <input
-          className="bp3-input bp3-round"
-          type="text"
-          name="email"
-          placeholder="Email"
-          onChange={this.handleChange}
-        />
-        <input
-          className="bp3-input bp3-round"
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={this.handleChange}
-        />
-        <input
-          className="bp3-input bp3-round"
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirmar Password"
-          onChange={this.handleChange}
-        />
-        <Button type="submit" text="Registro" />
       </form>
     );
   }

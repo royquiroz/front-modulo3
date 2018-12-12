@@ -14,7 +14,7 @@ class Modal extends Component {
           <h3>Registrate</h3>
         </div>
         <div className="bp3-dialog-body">
-          <Auth />
+          <Auth handleClose={this.props.handleClose} message={this.props.msg} />
         </div>
       </Dialog>
     );

@@ -5,7 +5,8 @@ import {
   Navbar,
   NavbarDivider,
   NavbarGroup,
-  NavbarHeading
+  NavbarHeading,
+  Toaster
 } from "@blueprintjs/core";
 import Modal from "./Modal";
 
@@ -18,7 +19,8 @@ class Nav extends Component {
       canOutsideClickClose: true,
       enforceFocus: true,
       isOpen: false,
-      usePortal: true
+      usePortal: true,
+      msg: ""
     };
   }
 
@@ -30,7 +32,13 @@ class Nav extends Component {
     this.setState({ isOpen: false });
   };
 
+  refHandlers = {
+    toaster: ref => (this.toaster = ref)
+  };
+
   render() {
+    console.log(this.state.msg);
+
     return (
       <div>
         <Navbar className="bp3-dark">
@@ -53,6 +61,7 @@ class Nav extends Component {
           </NavbarGroup>
         </Navbar>
         <Modal handleClose={this.handleClose} {...this.state} />
+        <Toaster ref={this.refHandlers.toaster} position="top" timeout="0" />
       </div>
     );
   }
