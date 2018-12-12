@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Dialog } from "@blueprintjs/core";
-import Form from "./Form";
+import Auth from "./Auth";
 
 class Modal extends Component {
   render() {
@@ -14,7 +14,7 @@ class Modal extends Component {
           <h3>Registrate</h3>
         </div>
         <div className="bp3-dialog-body">
-          <Form />
+          <Auth />
         </div>
       </Dialog>
     );
