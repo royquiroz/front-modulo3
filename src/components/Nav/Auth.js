@@ -32,16 +32,14 @@ class Auth extends Component {
     axios
       .post(`${base_url}/auth/register`, form)
       .then(res => {
-        this.props.message = res.data.msg;
-        //this.toaster.show({ message: msg });
+        this.props.updateMessage(res.data.msg);
       })
       .catch(err => {
-        this.props.message = err.message;
+        this.props.updateMessage(err.message);
       });
   };
 
   render() {
-    console.log(this.props);
     return (
       <form onSubmit={this.handleSubmit}>
         <FormGroup>
@@ -92,7 +90,10 @@ class Auth extends Component {
         <Button
           type="submit"
           text="Registro"
-          onClick={this.props.handleClose}
+          onClick={() => {
+            this.props.addToast();
+            this.props.handleClose();
+          }}
         />
       </form>
     );

@@ -32,8 +32,17 @@ class Nav extends Component {
     this.setState({ isOpen: false });
   };
 
+  updateMessage = msg => {
+    this.setState({ msg: msg });
+  };
+
   refHandlers = {
     toaster: ref => (this.toaster = ref)
+  };
+
+  addToast = () => {
+    if (this.state.msg.length > 0)
+      return this.toaster.show({ message: this.state.msg });
   };
 
   render() {
@@ -60,8 +69,13 @@ class Nav extends Component {
             />
           </NavbarGroup>
         </Navbar>
-        <Modal handleClose={this.handleClose} {...this.state} />
-        <Toaster ref={this.refHandlers.toaster} position="top" timeout="0" />
+        <Modal
+          handleClose={this.handleClose}
+          updateMessage={this.updateMessage}
+          addToast={this.addToast}
+          {...this.state}
+        />
+        <Toaster ref={this.refHandlers.toaster} position="top" />
       </div>
     );
   }
