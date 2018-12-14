@@ -24,58 +24,75 @@ class Auth extends Component {
     let field = e.target.name;
     form[field] = e.target.value;
 
-    console.log(form);
-
     this.setState({ form });
   };
 
   handleSubmit = e => {
     e.preventDefault();
     let { form } = this.state;
-    const base_url = "http://localhost:3000/api";
+    const base_url = "http://localhost:3000/api/auth";
+
+    let path;
+    let msg;
+
+    this.props.login ? (path = "/login") : (path = "/register");
 
     axios
-      .post(`${base_url}/auth/register`, form)
+      .post(`${base_url}${path}`, form)
       .then(res => {
         console.log(res);
-        this.setState({ message: res.data.msg });
+        res.status === 200
+          ? (msg = "Sesion iniciada correctamente")
+          : (msg = res.data.msg);
+        localStorage.setItem("token", res.data.token);
+        this.setState({ message: msg });
         this.info();
         this.props.handleCancel();
       })
       .catch(err => {
-        console.log(err);
-        this.setState({ message: "No se pudo crear el usuario" });
-        this.info();
+        err.message.includes(500)
+          ? (msg = "No se pudo crear el usuario")
+          : (msg = "Error al iniciar sesión");
+        this.setState({ message: msg });
+        this.error();
       });
   };
 
   info = () => {
-    message.info(this.state.message);
+    message.success(this.state.message, 5);
+  };
+
+  error = () => {
+    message.error(this.state.message, 5);
   };
 
   render() {
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem>
-          <Input
-            prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-            placeholder="Nombre"
-            name="name"
-            onChange={this.handleChange}
-          />
-        </FormItem>
-        <FormItem>
-          <Input
-            prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-            placeholder="Apellido"
-            name="last_name"
-            onChange={this.handleChange}
-          />
-        </FormItem>
+        {this.props.login ? null : (
+          <FormItem>
+            <Input
+              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+              placeholder="Nombre"
+              name="name"
+              onChange={this.handleChange}
+            />
+          </FormItem>
+        )}
+        {this.props.login ? null : (
+          <FormItem>
+            <Input
+              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+              placeholder="Apellido"
+              name="last_name"
+              onChange={this.handleChange}
+            />
+          </FormItem>
+        )}
         <FormItem>
           <Input
             prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
-            placeholder="Apellido"
+            placeholder="Email"
             name="email"
             onChange={this.handleChange}
           />
@@ -89,22 +106,24 @@ class Auth extends Component {
             onChange={this.handleChange}
           />
         </FormItem>
-        <FormItem>
-          <Input
-            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-            type="password"
-            placeholder="Confirmar Password"
-            name="confirmPassword"
-            onChange={this.handleChange}
-          />
-        </FormItem>
+        {this.props.login ? null : (
+          <FormItem>
+            <Input
+              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+              type="password"
+              placeholder="Confirmar Password"
+              name="confirmPassword"
+              onChange={this.handleChange}
+            />
+          </FormItem>
+        )}
         <FormItem>
           <Button
             type="primary"
             htmlType="submit"
             className="login-form-button"
           >
-            Registro
+            {this.props.login ? "Iniciar Sesión" : "Registro"}
           </Button>
         </FormItem>
       </Form>
