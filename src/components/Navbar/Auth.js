@@ -40,31 +40,41 @@ class Auth extends Component {
     axios
       .post(`${base_url}${path}`, form)
       .then(res => {
-        console.log(res);
-        res.status === 200
-          ? (msg = "Sesion iniciada correctamente")
-          : (msg = res.data.msg);
-        localStorage.setItem("token", res.data.token);
+        if (res.status === 200) {
+          msg = "Bienvenido";
+          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+        } else {
+          msg = res.data.msg;
+        }
         this.setState({ message: msg });
         this.info();
         this.props.handleCancel();
       })
       .catch(err => {
-        err.message.includes(500)
-          ? (msg = "No se pudo crear el usuario")
-          : (msg = "Error al iniciar sesión");
+        if (err.message.includes(500)) {
+          msg = "La direccion de correo ya existe";
+        } else if (err.message.includes(400)) {
+          msg = "Hacen falta datos en el formulario";
+        } else {
+          msg = "La contraseña es incorrecta";
+        }
         this.setState({ message: msg });
         this.error();
       });
   };
 
   info = () => {
-    message.success(this.state.message, 5);
+    message.success(this.state.message, 3);
   };
 
   error = () => {
-    message.error(this.state.message, 5);
+    message.error(this.state.message, 3);
   };
+
+  componentWillUnmount() {
+    this.props.updateUser(localStorage.getItem("user"));
+  }
 
   render() {
     return (

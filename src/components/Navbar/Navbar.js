@@ -1,6 +1,10 @@
 import React, { Component } from "react";
-import { Menu, Button, Modal, Avatar } from "antd";
+import { Menu, Button, Modal, Avatar, message } from "antd";
+import { NavLink } from "react-router-dom";
 import Auth from "./Auth";
+
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
 
 class Navbar extends Component {
   constructor() {
@@ -30,6 +34,12 @@ class Navbar extends Component {
     });
   };
 
+  clearStorage = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    message.success("Cerraste sesión exitosamente", 3);
+  };
+
   render() {
     return (
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -41,12 +51,31 @@ class Navbar extends Component {
             selectable={false}
             style={{ lineHeight: "64px" }}
           >
-            <Menu.Item>
-              <Avatar
-                size="large"
-                src="https://res.cloudinary.com/royquiroz/image/upload/v1541866543/Tfixeo/18767585_996982753771260_1983069507747502591_n.jpg"
-              />
-            </Menu.Item>
+            <SubMenu
+              title={<Avatar size="large" src={this.props.user.profile_pic} />}
+            >
+              <MenuItemGroup>
+                <Menu.Item key="1">
+                  <NavLink
+                    style={{ border: 0, textAlign: "left", paddingLeft: "1%" }}
+                    exact
+                    to={`/profile`}
+                  >
+                    Perfil
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="2">
+                  <NavLink
+                    style={{ border: 0, textAlign: "left", paddingLeft: "1%" }}
+                    onClick={this.clearStorage}
+                    exact
+                    to="/"
+                  >
+                    Cerrar Sesión
+                  </NavLink>
+                </Menu.Item>
+              </MenuItemGroup>
+            </SubMenu>
           </Menu>
         ) : (
           <Menu
@@ -78,7 +107,11 @@ class Navbar extends Component {
           destroyOnClose={true}
           footer={null}
         >
-          <Auth handleCancel={this.handleCancel} {...this.state} />
+          <Auth
+            handleCancel={this.handleCancel}
+            {...this.state}
+            updateUser={this.props.updateUser}
+          />
         </Modal>
       </div>
     );
