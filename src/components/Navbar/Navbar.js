@@ -52,7 +52,16 @@ class Navbar extends Component {
             style={{ lineHeight: "64px" }}
           >
             <SubMenu
-              title={<Avatar size="large" src={this.props.user.profile_pic} />}
+              title={
+                this.props.user === null ? (
+                  <Avatar
+                    size="large"
+                    src="https://res.cloudinary.com/royquiroz/image/upload/v1541363947/Tfixeo/male.png"
+                  />
+                ) : (
+                  <Avatar size="large" src={this.props.user.profile_pic} />
+                )
+              }
             >
               <MenuItemGroup>
                 <Menu.Item key="1">

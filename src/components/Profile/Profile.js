@@ -29,7 +29,7 @@ class Profile extends Component {
     axios
       .get(base_url, { headers })
       .then(res => {
-        console.log(res.data);
+        this.props.updateUser(JSON.stringify(res.data.user));
       })
       .catch(err => {
         console.log(err);
@@ -54,14 +54,12 @@ class Profile extends Component {
       "x-access-token": localStorage.getItem("token")
     };
 
-    console.log(this.state.form);
-    console.log(base_url);
-    console.log(headers);
+    console.log(form);
 
     axios
-      .patch(base_url, form, headers)
+      .patch(base_url, form, { headers })
       .then(res => {
-        console.log(res);
+        this.props.updateUser(JSON.stringify(res.data.user));
       })
       .catch(err => {
         console.log(err);
@@ -82,7 +80,7 @@ class Profile extends Component {
                   placeholder="Nombre"
                   name="name"
                   onChange={this.handleChange}
-                  value={this.props.user.name}
+                  defaultValue={this.props.user.name}
                 />
               </FormItem>
               <FormItem>
@@ -91,7 +89,7 @@ class Profile extends Component {
                   placeholder="Apellido"
                   name="last_name"
                   onChange={this.handleChange}
-                  value={this.props.user.last_name}
+                  defaultValue={this.props.user.last_name}
                 />
               </FormItem>
               <FormItem>
@@ -100,7 +98,7 @@ class Profile extends Component {
                   placeholder="Email"
                   name="email"
                   disabled
-                  value={this.props.user.email}
+                  defaultValue={this.props.user.email}
                 />
               </FormItem>
               <FormItem>
@@ -117,6 +115,7 @@ class Profile extends Component {
                   placeholder="Escribe algo sobre ti"
                   name="description"
                   onChange={this.handleChange}
+                  defaultValue={this.props.user.description}
                 />
               </FormItem>
               <FormItem>

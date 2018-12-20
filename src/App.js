@@ -38,7 +38,7 @@ class App extends Component {
           <Navbar {...this.state} updateUser={this.updateUser} />
         </Header>
         <Content style={{ padding: "0 50px", marginTop: 64 }}>
-          <Router {...this.state} />
+          <Router {...this.state} updateUser={this.updateUser} />
         </Content>
         <Footer>
           <h4>Este es un footer</h4>
