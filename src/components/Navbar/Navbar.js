@@ -51,6 +51,9 @@ class Navbar extends Component {
             selectable={false}
             style={{ lineHeight: "64px" }}
           >
+            <Menu.Item>
+              <a href="/place">Da de alta tu espacio</a>
+            </Menu.Item>
             <SubMenu
               title={
                 this.props.user === null ? (

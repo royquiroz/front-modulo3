@@ -29,7 +29,8 @@ class Profile extends Component {
     axios
       .get(base_url, { headers })
       .then(res => {
-        this.props.updateUser(JSON.stringify(res.data.user));
+        console.log("Data desde component profile", res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
       })
       .catch(err => {
         console.log(err);
@@ -40,7 +41,7 @@ class Profile extends Component {
     let { form } = this.state;
     let field = e.target.name;
     form[field] = e.target.value;
-    //console.log(form);
+    console.log(form);
 
     this.setState({ form });
   };
@@ -54,7 +55,7 @@ class Profile extends Component {
       "x-access-token": localStorage.getItem("token")
     };
 
-    console.log(form);
+    //console.log(form);
 
     axios
       .patch(base_url, form, { headers })
